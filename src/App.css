@@ -1,6 +1,9 @@
 * {
   font-family: sans-serif;
 }
+form {
+  align-items: center;
+}
 input,
 button {
   font-size: 20px;
@@ -15,6 +18,11 @@ button {
   border: 1px solid gray;
   background: whitesmoke;
   margin-right: 5px;
+}
+#buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(5, 100px);
 }
 button:nth-last-child(2),
 button:nth-last-child(1) {
