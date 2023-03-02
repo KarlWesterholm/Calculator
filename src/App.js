@@ -1,14 +1,23 @@
 import {
   useState,
-  useRef
+  useRef,
+  useEffect
 } from "react";
 import "./App.css";
 
 function App() {
   const inputRef = useRef(null);
-  const resultRef = useRef(null);
+  // const resultRef = useRef(null);
+  const displayRef = useRef(null);
+  const [display, setDisplay] = useState(0);
   const [result, setResult] = useState(0);
+  const [operation, setOperation] = useState("");
 
+  useEffect(() => {
+    setDisplay(result)
+  }, [result])
+
+  // Adds new number, n, to input display
   function newNum(e,n) {
     e.preventDefault();
     inputRef.current.value = inputRef.current.value * 10 + n;
@@ -16,7 +25,10 @@ function App() {
   
   function plus(e) {
     e.preventDefault();
-    setResult((result) => result + Number(inputRef.current.value));
+    setResult((result) => result + Number(inputRef.current.value))
+    setDisplay(`${inputRef.current.value} + `);
+    resetInput(e);
+    setOperation("plus");
   }
 
   function minus(e) {
@@ -34,9 +46,29 @@ function App() {
     setResult((result) => result / Number(inputRef.current.value));
   }
 
+  function equals(e) {
+    e.preventDefault();
+    switch(operation) {
+      case "plus":
+        setResult((result) => result + Number(inputRef.current.value));
+        break;
+      case "minus":
+        setResult((result) => result - Number(inputRef.current.value));
+        break;
+      case "times":
+        setResult((result) => result * Number(inputRef.current.value));
+        break;
+      case "divide":
+        setResult((result) => result / Number(inputRef.current.value));
+        break;
+      default:
+        return null
+    }
+  }
+
   function resetInput(e) {
     e.preventDefault();
-    inputRef.current.value = null;
+    inputRef.current.value = 0;
   }
 
   function resetResult(e) {
@@ -47,11 +79,11 @@ function App() {
   return (
       <div className="App">
         <div>
-          <h1>Simplest Working Calculator</h1>
+          <h1 color="white">Simplest Working Calculator</h1>
         </div>
         <form>
-          <p ref={resultRef}>
-            {result}
+          <p ref={displayRef}>
+            {display}
           </p>
           <input
               pattern="[0-9]"
@@ -74,6 +106,7 @@ function App() {
             <button onClick={(e) => newNum(e,8)}>8</button>
             <button onClick={(e) => newNum(e,9)}>9</button>
             <button onClick={(e) => newNum(e,0)}>0</button>
+            <button id="equalSign" onClick={equals}>=</button>
             <button onClick={resetInput}>reset input</button>
             <button onClick={resetResult}>reset result</button>
           </div>
